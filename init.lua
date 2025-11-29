@@ -1,5 +1,5 @@
-require("base.keymaps")
-require("base.lazy")
+require("config.vscode-keymaps")
+require("config.lazy")
 
 vim.opt.number = true
 vim.opt.showcmd = true
