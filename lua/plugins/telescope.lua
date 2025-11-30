@@ -6,5 +6,7 @@ return {
         { "<leader>fg", function() require("telescope.builtin").live_grep() end,  desc = "Telescope live grep" },
         { "<leader>fb", function() require("telescope.builtin").buffers() end,    desc = "Telescope buffers" },
         { "<leader>fh", function() require("telescope.builtin").help_tags() end,  desc = "Telescope help tags" },
+        { "<leader>gs", function() require("telescope.builtin").git_status() end,  desc = "Telescope git status" },
+        { "<leader>gf", function() require("telescope.builtin").git_files() end,  desc = "Telescope git files" },
     },
 }
