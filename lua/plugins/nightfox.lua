@@ -6,6 +6,6 @@ return {
 	config = function()
 		-- Optionally configure and load the colorscheme
 		-- directly inside the plugin declaration.
-		vim.cmd.colorscheme('carbonfox')
+        vim.cmd.colorscheme('carbonfox')
 	end
 }

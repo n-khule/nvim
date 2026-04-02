@@ -20,3 +20,5 @@ vim.opt.shiftwidth = 4
 -- Show cursor position
 vim.opt.ruler = true
 
+-- Theme
+vim.opt.termguicolors = true
