@@ -42,8 +42,8 @@ opt.smartindent = true
 -- Completion 
 vim.o.autocomplete = true
 opt.completeopt    = "menu,menuone,noselect,popup"
--- vim.o.pumborder    = "rounded"
--- vim.o.pummaxwidth  = 40
+vim.o.pumborder    = "rounded"
+vim.o.pummaxwidth  = 80
 
 -- Diagnostics 
 local sev = vim.diagnostic.severity
@@ -111,6 +111,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 -- Formatting 
+vim.g.format_on_save = false -- toggle with <leader>tf
 local cf_ok, conform = pcall(require, "conform")
 if cf_ok then
     conform.setup({
@@ -122,7 +123,9 @@ if cf_ok then
     })
     vim.api.nvim_create_autocmd("BufWritePre", {
         callback = function(args)
-            conform.format({ bufnr = args.buf, lsp_fallback = true })
+            if vim.g.format_on_save then
+                conform.format({ bufnr = args.buf, lsp_fallback = true })
+            end
         end,
     })
 end
@@ -160,6 +163,12 @@ end
 local function map(mode, lhs, rhs, desc)
     vim.keymap.set(mode, lhs, rhs, { silent = true, desc = desc })
 end
+
+-- Formatting
+map("n", "<leader>tf", function()
+    vim.g.format_on_save = not vim.g.format_on_save
+    vim.notify("Format on save: " .. (vim.g.format_on_save and "on" or "off"))
+end, "Toggle format on save")
 
 -- Telescope
 local tel_ok, tb = pcall(require, "telescope.builtin")
