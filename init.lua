@@ -19,6 +19,11 @@ vim.pack.add({
 -- Options 
 local opt = vim.opt
 
+-- Keymaps 
+local function map(mode, lhs, rhs, desc)
+    vim.keymap.set(mode, lhs, rhs, { silent = true, desc = desc })
+end
+
 opt.number         = true
 opt.relativenumber = true
 opt.signcolumn     = "yes"   -- always show; prevents layout shifts on diagnostics
@@ -132,6 +137,12 @@ if cf_ok then
             end
         end,
     })
+    map("v", "<leader>lf", function()
+        conform.format({ range = {
+            start = vim.api.nvim_buf_get_mark(0, "<"),
+            ["end"] = vim.api.nvim_buf_get_mark(0, ">"),
+        }})
+    end, "Format selection")
 end
 
 -- Treesitter 
@@ -182,11 +193,6 @@ if nt_ok then
 	})
 end
 
-
--- Keymaps 
-local function map(mode, lhs, rhs, desc)
-    vim.keymap.set(mode, lhs, rhs, { silent = true, desc = desc })
-end
 
 -- Formatting
 map("n", "<leader>tf", function()
