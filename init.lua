@@ -13,7 +13,6 @@ vim.pack.add({
     { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main", build = ":TSUpdate" },
     { src = "https://github.com/SmiteshP/nvim-navic" },
     { src = "https://github.com/nvim-tree/nvim-tree.lua" },
-    { src = "https://github.com/nvim-tree/nvim-web-devicons" },
 })
 
 -- Options 
@@ -178,19 +177,39 @@ end
 local nt_ok, nvimtree = pcall(require, "nvim-tree")
 if nt_ok then
     nvimtree.setup({
-		sort = {
-			sorter = "case_sensitive",
-		},
-		view = {
-			width = 40,
-		},
-		renderer = {
-			group_empty = true,
-		},
-		filters = {
-			dotfiles = true,
-		},
-	})
+        filters = {
+            dotfiles = false,  -- set true if you want to hide ALL dotfiles
+            custom   = { "^.git$" },
+        },
+        renderer = {
+            icons = {
+                show = {
+                    file         = true,
+                    folder       = false,
+                    folder_arrow = true,
+                    git          = false,
+                },
+                glyphs = {
+                    default  = "-",
+                    folder   = { arrow_open = "v", arrow_closed = ">" },
+                    git      = {
+                        unstaged  = "M",
+                        staged    = "A",
+                        unmerged  = "U",
+                        renamed   = "R",
+                        untracked = "?",
+                        deleted   = "D",
+                        ignored   = "!",
+                    },
+                },
+            },
+        },
+    })
+
+    -- Underline folder names
+    vim.api.nvim_set_hl(0, "NvimTreeFolderName",      { underline = true })
+    vim.api.nvim_set_hl(0, "NvimTreeOpenedFolderName", { underline = true })
+    vim.api.nvim_set_hl(0, "NvimTreeEmptyFolderName",  { underline = true })
 end
 
 
@@ -252,4 +271,4 @@ vim.o.statusline = table.concat({
 })
 
 -- Colorscheme 
-vim.cmd.colorscheme("habamax")
+vim.cmd.colorscheme("default")
