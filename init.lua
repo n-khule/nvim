@@ -1,3 +1,6 @@
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
@@ -9,7 +12,8 @@ vim.pack.add({
     { src = "https://github.com/stevearc/conform.nvim" },             -- multi-formatter dispatch
     { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main", build = ":TSUpdate" },
     { src = "https://github.com/SmiteshP/nvim-navic" },
-    { src = "https://github.com/thesimonho/kanagawa-paper.nvim" },
+    { src = "https://github.com/nvim-tree/nvim-tree.lua" },
+    { src = "https://github.com/nvim-tree/nvim-web-devicons" },
 })
 
 -- Options 
@@ -159,6 +163,26 @@ if gs_ok then
     })
 end
 
+-- nvim-tree
+local nt_ok, nvimtree = pcall(require, "nvim-tree")
+if nt_ok then
+    nvimtree.setup({
+		sort = {
+			sorter = "case_sensitive",
+		},
+		view = {
+			width = 40,
+		},
+		renderer = {
+			group_empty = true,
+		},
+		filters = {
+			dotfiles = true,
+		},
+	})
+end
+
+
 -- Keymaps 
 local function map(mode, lhs, rhs, desc)
     vim.keymap.set(mode, lhs, rhs, { silent = true, desc = desc })
@@ -179,6 +203,9 @@ if tel_ok then
     map("n", "<leader>fh", tb.help_tags,   "Help tags")
     map("n", "<leader>fd", tb.diagnostics, "Diagnostics")
 end
+
+-- nvim-tree.lua
+map("n", "<leader>b", "<cmd>NvimTreeToggle<CR>", "Toggle file tree")
 
 -- LSP extras (0.12 built-ins cover gra/grn/grr/gri/grt already)
 map("n", "<leader>ld", vim.lsp.buf.definition,     "Go to definition")
@@ -219,4 +246,4 @@ vim.o.statusline = table.concat({
 })
 
 -- Colorscheme 
-vim.cmd.colorscheme("kanagawa-paper-ink")
+vim.cmd.colorscheme("habamax")
