@@ -271,4 +271,4 @@ vim.o.statusline = table.concat({
 })
 
 -- Colorscheme 
-vim.cmd.colorscheme("default")
+vim.cmd.colorscheme("2026-dark")
