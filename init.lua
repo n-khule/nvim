@@ -6,13 +6,15 @@ vim.g.maplocalleader = "\\"
 
 -- Plugins 
 vim.pack.add({
-    { src = "https://github.com/nvim-lua/plenary.nvim" },             -- telescope dependency
-    { src = "https://github.com/nvim-telescope/telescope.nvim" },     -- fuzzy finder
-    { src = "https://github.com/lewis6991/gitsigns.nvim" },           -- git gutter + blame
-    { src = "https://github.com/stevearc/conform.nvim" },             -- multi-formatter dispatch
+    { src = "https://github.com/nvim-lua/plenary.nvim" },
+    { src = "https://github.com/nvim-telescope/telescope.nvim" },
+    { src = "https://github.com/lewis6991/gitsigns.nvim" },
+    { src = "https://github.com/stevearc/conform.nvim" },
     { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main", build = ":TSUpdate" },
     { src = "https://github.com/SmiteshP/nvim-navic" },
     { src = "https://github.com/nvim-tree/nvim-tree.lua" },
+    { src = "https://github.com/benomahony/uv.nvim" },
+    { src = "https://github.com/nvim-lualine/lualine.nvim" },
 })
 
 -- Options 
@@ -212,6 +214,59 @@ if nt_ok then
     vim.api.nvim_set_hl(0, "NvimTreeEmptyFolderName",  { underline = true })
 end
 
+-- uv.nvim
+local uv_ok, uv = pcall(require, "uv")
+if uv_ok then
+    uv.setup({
+      -- Auto-activate virtual environments when found
+      auto_activate_venv = true,
+      notify_activate_venv = true,
+
+      -- Integration with a UI picker (remove if you don't use snacks/telescope)
+      picker_integration = true,
+
+      -- Keymaps (uses <leader>x prefix by default)
+      keymaps = {
+        prefix = "<leader>x",
+        commands = true,
+        run_file = true,
+        run_selection = true,
+        run_function = true,
+        venv = true,
+        init = true,
+        add = true,
+        remove = true,
+        sync = true,
+      },
+
+      execution = {
+        run_command = "uv run python",
+        notify_output = true,
+        notification_timeout = 10000,
+      },
+    })
+end
+
+-- lualine
+local lualine_ok, lualine = pcall(require, "lualine")
+if lualine_ok then
+    lualine.setup({
+        options = {
+            icons_enabled = false,
+            theme = "auto",
+            component_separators = { left = "|", right = "|" },
+            section_separators = { left = "", right = "" },
+        },
+        sections = {
+            lualine_a = { "mode" },
+            lualine_b = { "branch", "diff" },
+            lualine_c = { "filename", "diagnostics" },
+            lualine_x = { "filetype" },
+            lualine_y = { "progress" },
+            lualine_z = { "location" },
+        },
+    })
+end
 
 -- Formatting
 map("n", "<leader>tf", function()
@@ -258,17 +313,6 @@ map("n", "<leader>w", "<cmd>write<CR>",      "Save")
 map("n", "<leader>q", "<cmd>quit<CR>",       "Quit")
 map("n", "<leader>u", "<cmd>packadd nvim.undotree | Undotree<CR>", "Undotree")
 
--- Statusline 
-vim.o.statusline = table.concat({
-    " %f",                                  -- relative file path
-    " %m%r",                                -- [+] modified, [RO] readonly
-    "%=",                                   -- right-align everything after
-    "%{%v:lua.vim.lsp.status()%}",          -- LSP progress messages
-    " | ",
-    "%{%v:lua.vim.diagnostic.status()%}",   -- error/warn counts
-    " | %l:%c ",                            -- line:column
-    " %p%% ",                               -- scroll percentage
-})
-
 -- Colorscheme 
 vim.cmd.colorscheme("2026-dark")
+
