@@ -307,6 +307,11 @@ map("n", "<C-j>", "<C-w>j", "Move to lower window")
 map("n", "<C-k>", "<C-w>k", "Move to upper window")
 map("n", "<C-l>", "<C-w>l", "Move to right window")
 
+-- Terminal Windows
+map("n", "<leader>tv", function() vim.cmd("vertical " .. math.floor(vim.o.columns * 0.25) .. "split | terminal" ) end)
+map("n", "<leader>th", function () vim.cmd(math.floor(vim.o.lines * 0.25) .. "split | terminal" ) end)
+map("n", "<leader>tt", function() vim.cmd(math.floor(vim.o.lines * 0.25) .. "split | terminal" ) end)
+
 -- Misc
 map("n", "<Esc>",     "<cmd>nohlsearch<CR>", "Clear search highlight")
 map("n", "<leader>w", "<cmd>write<CR>",      "Save")
