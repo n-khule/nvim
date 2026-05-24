@@ -98,7 +98,23 @@ vim.lsp.config("lua_ls", {
     },
 })
 
-vim.lsp.enable({ "basedpyright", "gopls", "lua_ls" })
+vim.lsp.config("ts_ls", {
+    cmd          = { "typescript-language-server", "--stdio" },
+    filetypes    = { "typescript", "typescriptreact", "javascript", "javascriptreact" },
+    root_markers = { "package.json", "tsconfig.json", "jsconfig.json", ".git" },
+    settings     = {
+        typescript = {
+            inlayHints = {
+                includeInlayParameterNameHints = "all",
+                includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+                includeInlayFunctionLikeReturnTypeHints = true,
+                includeInlayEnumMemberValueHints = true,
+            },
+        },
+    },
+})
+
+vim.lsp.enable({ "basedpyright", "gopls", "lua_ls", "ts_ls" })
 
 -- Enable inlay hints and code lens when the server supports them
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -129,6 +145,13 @@ if cf_ok then
             lua    = { "stylua" },
             python = { "ruff_format" },
             go     = { "gofmt" },
+            javascript = { "prettierd", "prettier" },
+            javascriptreact = { "prettierd", "prettier" },
+            typescript = { "prettierd", "prettier" },
+            typescriptreact = { "prettierd", "prettier" },
+            json       = { "prettierd", "prettier" },
+            yaml       = { "prettierd", "prettier" },
+            markdown   = { "prettierd", "prettier" },
         },
     })
     vim.api.nvim_create_autocmd("BufWritePre", {
