@@ -15,6 +15,13 @@ vim.pack.add({
     { src = "https://github.com/nvim-tree/nvim-tree.lua" },
     { src = "https://github.com/benomahony/uv.nvim" },
     { src = "https://github.com/nvim-lualine/lualine.nvim" },
+    { src = "https://github.com/nvim-tree/nvim-web-devicons" },
+    { src = "https://github.com/hrsh7th/nvim-cmp" },
+    { src = "https://github.com/hrsh7th/cmp-nvim-lsp" },
+    { src = "https://github.com/hrsh7th/cmp-buffer" },
+    { src = "https://github.com/hrsh7th/cmp-path" },
+    { src = "https://github.com/L3MON4D3/LuaSnip" },
+    { src = "https://github.com/saadparwaiz1/cmp_luasnip" },
 })
 
 -- Options 
@@ -49,11 +56,7 @@ opt.shiftwidth  = 4
 opt.expandtab   = true
 opt.smartindent = true
 
--- Completion 
-vim.o.autocomplete = true
-opt.completeopt    = "menu,menuone,noselect,popup"
-vim.o.pumborder    = "rounded"
-vim.o.pummaxwidth  = 80
+-- nvim-cmp handles completion
 
 -- Diagnostics 
 local sev = vim.diagnostic.severity
@@ -114,6 +117,13 @@ vim.lsp.config("ts_ls", {
     },
 })
 
+-- nvim-cmp capabilities for LSP
+local cmp_capabilities = (function()
+    local ok, cmp_lsp = pcall(require, "cmp_nvim_lsp")
+    return ok and cmp_lsp.default_capabilities() or vim.lsp.protocol.make_client_capabilities()
+end)()
+vim.lsp.config("*", { capabilities = cmp_capabilities })
+
 vim.lsp.enable({ "basedpyright", "gopls", "lua_ls", "ts_ls" })
 
 -- Enable inlay hints and code lens when the server supports them
@@ -127,14 +137,81 @@ vim.api.nvim_create_autocmd("LspAttach", {
         end
 
         if client:supports_method("textDocument/codeLens") then
-            vim.lsp.codelens.refresh()
+            vim.lsp.codelens.run()
             vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave" }, {
                 buffer   = ev.buf,
-                callback = vim.lsp.codelens.refresh,
+                callback = vim.lsp.codelens.run,
             })
         end
     end,
 })
+
+-- nvim-cmp
+local cmp_ok, cmp = pcall(require, "cmp")
+if cmp_ok then
+    local kind_icons = {
+        Text          = "\u{f0d18}",
+        Method        = "\u{f06b1}",
+        Function      = "\u{f0530}",
+        Constructor   = "\u{f0bd7}",
+        Field         = "\u{f0ba9}",
+        Variable      = "\u{f0628}",
+        Class         = "\u{f0ec6}",
+        Interface     = "\u{f0f8a}",
+        Module        = "\u{f0480}",
+        Property      = "\u{f032b}",
+        Unit          = "\u{f0493}",
+        Value         = "\u{f0556}",
+        Enum          = "\u{f02ad}",
+        Keyword       = "\u{f03fe}",
+        Snippet       = "\u{f0cce}",
+        Color         = "\u{f0f3c}",
+        File          = "\u{f0168}",
+        Reference     = "\u{f0318}",
+        Folder        = "\u{f0169}",
+        EnumMember    = "\u{f02ad}",
+        Constant      = "\u{f04d9}",
+        Struct        = "\u{f0ec6}",
+        Event         = "\u{f01ad}",
+        Operator      = "\u{f0599}",
+        TypeParameter = "\u{f0cec}",
+    }
+
+    cmp.setup({
+        snippet = {
+            expand = function(args)
+                require("luasnip").lsp_expand(args.body)
+            end,
+        },
+        mapping = cmp.mapping.preset.insert({
+            ["<C-Space>"] = cmp.mapping.complete(),
+            ["<CR>"] = cmp.mapping.confirm({ select = true }),
+            ["<Tab>"] = cmp.mapping.select_next_item(),
+            ["<S-Tab>"] = cmp.mapping.select_prev_item(),
+        }),
+        sources = cmp.config.sources({
+            { name = "nvim_lsp" },
+        }, {
+            { name = "buffer" },
+            { name = "path" },
+        }),
+        window = {
+            completion = {
+                border = "rounded",
+                winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,CursorLine:PmenuSel,Search:None",
+            },
+            documentation = {
+                border = "rounded",
+            },
+        },
+        formatting = {
+            format = function(entry, vim_item)
+                vim_item.kind = (kind_icons[vim_item.kind] or "") .. " " .. vim_item.kind
+                return vim_item
+            end,
+        },
+    })
+end
 
 -- Formatting 
 vim.g.format_on_save = false -- toggle with <leader>tf
@@ -277,8 +354,8 @@ if lualine_ok then
         options = {
             icons_enabled = false,
             theme = "auto",
-            component_separators = { left = "|", right = "|" },
-            section_separators = { left = "", right = "" },
+            -- component_separators = { left = "|", right = "|" },
+            -- section_separators = { left = "", right = "" },
         },
         sections = {
             lualine_a = { "mode" },
@@ -316,8 +393,7 @@ map("n", "<leader>lh", vim.lsp.buf.hover,          "Hover docs")
 map("n", "<leader>ls", vim.lsp.buf.signature_help, "Signature help")
 map("n", "<leader>lf", vim.lsp.buf.format,         "LSP format")
 
--- Ctrl-Space triggers omnifunc (LSP) completions specifically
-map("i", "<C-Space>", "<C-x><C-o>", "Trigger LSP completion")
+-- Ctrl-Space triggers nvim-cmp (configured above)
 
 -- Diagnostics
 map("n", "[d",        vim.diagnostic.goto_prev,  "Prev diagnostic")
