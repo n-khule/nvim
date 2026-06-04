@@ -36,6 +36,7 @@ opt.number         = true
 opt.relativenumber = true
 opt.signcolumn     = "yes"   -- always show; prevents layout shifts on diagnostics
 opt.cursorline     = true
+opt.guicursor      = ""
 opt.termguicolors  = true
 opt.scrolloff      = 8
 opt.splitright     = true
@@ -130,21 +131,80 @@ vim.lsp.enable({ "basedpyright", "gopls", "lua_ls", "ts_ls" })
 vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(ev)
         local client = vim.lsp.get_client_by_id(ev.data.client_id)
-        if not client then return end
+        if not client then
+            return
+        end
 
+        -- Inlay hints
         if client:supports_method("textDocument/inlayHint") then
             vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
         end
 
+        -- CodeLens
         if client:supports_method("textDocument/codeLens") then
-            vim.lsp.codelens.run()
-            vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave" }, {
-                buffer   = ev.buf,
-                callback = vim.lsp.codelens.run,
+            vim.lsp.codelens.refresh()
+
+            local codelens_group = vim.api.nvim_create_augroup(
+                "lsp-codelens-" .. ev.buf,
+                { clear = true }
+            )
+
+            vim.api.nvim_create_autocmd({
+                "BufEnter",
+                "BufWinEnter",
+                "BufWritePost",
+                "InsertLeave",
+                "TextChanged",
+                "TextChangedI",
+                "CursorHold",
+                "CursorHoldI",
+                "FocusGained",
+            }, {
+                group = codelens_group,
+                buffer = ev.buf,
+                callback = function()
+                    vim.lsp.codelens.refresh({
+                        bufnr = ev.buf,
+                    })
+                end,
             })
         end
-    end,
-})
+
+        -- Symbol highlighting
+        if client:supports_method("textDocument/documentHighlight") then
+            local highlight_group = vim.api.nvim_create_augroup(
+                "lsp-highlight-" .. ev.buf,
+                { clear = true }
+            )
+
+            vim.api.nvim_create_autocmd(
+                { "CursorHold", "CursorHoldI" },
+                {
+                    group = highlight_group,
+                    buffer = ev.buf,
+                    callback = vim.lsp.buf.document_highlight,
+                }
+            )
+
+            vim.api.nvim_create_autocmd(
+                { "CursorMoved", "CursorMovedI" },
+                {
+                    group = highlight_group,
+                    buffer = ev.buf,
+                    callback = vim.lsp.buf.clear_references,
+                }
+            )
+        end
+
+        -- Navic breadcrumbs
+        local ok, navic = pcall(require, "nvim-navic")
+        if ok
+            and client:supports_method("textDocument/documentSymbol")
+            then
+                navic.attach(client, ev.buf)
+            end
+        end,
+    })
 
 -- nvim-cmp
 local cmp_ok, cmp = pcall(require, "cmp")
