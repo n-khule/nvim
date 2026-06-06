@@ -37,6 +37,7 @@ opt.relativenumber = true
 opt.signcolumn     = "yes"   -- always show; prevents layout shifts on diagnostics
 opt.cursorline     = true
 opt.guicursor      = ""
+opt.mouse          = "a"
 opt.termguicolors  = true
 opt.scrolloff      = 8
 opt.splitright     = true
@@ -142,7 +143,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
         -- CodeLens
         if client:supports_method("textDocument/codeLens") then
-            vim.lsp.codelens.refresh()
+            vim.lsp.codelens.enable(true, { bufnr = ev.buf })
 
             local codelens_group = vim.api.nvim_create_augroup(
                 "lsp-codelens-" .. ev.buf,
@@ -163,9 +164,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
                 group = codelens_group,
                 buffer = ev.buf,
                 callback = function()
-                    vim.lsp.codelens.refresh({
-                        bufnr = ev.buf,
-                    })
+                    vim.lsp.codelens.enable(true, { bufnr = ev.buf })
                 end,
             })
         end
@@ -414,6 +413,7 @@ if lualine_ok then
         options = {
             icons_enabled = false,
             theme = "auto",
+            disabled_buftypes = { "terminal", "nofile", "prompt", "quickfix" },
             -- component_separators = { left = "|", right = "|" },
             -- section_separators = { left = "", right = "" },
         },
@@ -424,6 +424,23 @@ if lualine_ok then
             lualine_x = { "filetype" },
             lualine_y = { "progress" },
             lualine_z = { "location" },
+        },
+        tabline = {
+            lualine_a = { {
+                "buffers",
+                show_filename_only = true,
+                hide_filename_extension = false,
+                show_modified_status = true,
+                buffers_color = {
+                    active   = "lualine_a_normal",
+                    inactive = "lualine_c_normal",
+                },
+            } },
+            lualine_b = {},
+            lualine_c = {},
+            lualine_x = {},
+            lualine_y = {},
+            lualine_z = {},
         },
     })
 end
