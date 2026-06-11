@@ -90,6 +90,12 @@ vim.lsp.config("gopls", {
     },
 })
 
+vim.lsp.config("golangci_lint_ls", {
+    cmd          = { "golangci-lint-langserver" },
+    filetypes    = { "go", "gomod" },
+    root_markers = { "go.mod", ".git" },
+})
+
 vim.lsp.config("lua_ls", {
     cmd          = { "lua-language-server" },
     filetypes    = { "lua" },
@@ -126,7 +132,7 @@ local cmp_capabilities = (function()
 end)()
 vim.lsp.config("*", { capabilities = cmp_capabilities })
 
-vim.lsp.enable({ "basedpyright", "gopls", "lua_ls", "ts_ls" })
+vim.lsp.enable({ "basedpyright", "gopls", "golangci_lint_ls", "lua_ls", "ts_ls" })
 
 -- Enable inlay hints and code lens when the server supports them
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -346,7 +352,7 @@ if nt_ok then
             icons = {
                 show = {
                     file         = true,
-                    folder       = false,
+                    folder       = true,
                     folder_arrow = true,
                     git          = false,
                 },
@@ -411,7 +417,7 @@ local lualine_ok, lualine = pcall(require, "lualine")
 if lualine_ok then
     lualine.setup({
         options = {
-            icons_enabled = false,
+            icons_enabled = true,
             theme = "auto",
             disabled_buftypes = { "terminal", "nofile", "prompt", "quickfix" },
             -- component_separators = { left = "|", right = "|" },
@@ -459,6 +465,12 @@ if tel_ok then
     map("n", "<leader>fb", tb.buffers,     "Buffers")
     map("n", "<leader>fh", tb.help_tags,   "Help tags")
     map("n", "<leader>fd", tb.diagnostics, "Diagnostics")
+end
+
+-- Winbar breadcrumbs
+local navic_ok_winbar, navic_winbar = pcall(require, "nvim-navic")
+if navic_ok_winbar then
+    vim.opt.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
 end
 
 -- nvim-tree.lua
