@@ -22,6 +22,7 @@ vim.pack.add({
     { src = "https://github.com/hrsh7th/cmp-path" },
     { src = "https://github.com/L3MON4D3/LuaSnip" },
     { src = "https://github.com/saadparwaiz1/cmp_luasnip" },
+    { src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
 })
 
 -- Options 
@@ -450,6 +451,9 @@ if lualine_ok then
         },
     })
 end
+
+-- Render markdown
+require("render-markdown").setup()
 
 -- Formatting
 map("n", "<leader>tf", function()
