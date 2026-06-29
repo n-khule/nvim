@@ -4,6 +4,8 @@ vim.g.loaded_netrwPlugin = 1
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
+
+
 -- Plugins 
 vim.pack.add({
     { src = "https://github.com/nvim-lua/plenary.nvim" },
@@ -13,7 +15,6 @@ vim.pack.add({
     { src = "https://github.com/SmiteshP/nvim-navic" },
     { src = "https://github.com/benomahony/uv.nvim" },
     { src = "https://github.com/nvim-lualine/lualine.nvim" },
-    { src = "https://github.com/nvim-tree/nvim-web-devicons" },
     { src = "https://github.com/hrsh7th/nvim-cmp" },
     { src = "https://github.com/hrsh7th/cmp-nvim-lsp" },
     { src = "https://github.com/hrsh7th/cmp-buffer" },
@@ -242,31 +243,31 @@ vim.api.nvim_create_autocmd("LspAttach", {
 local cmp_ok, cmp = pcall(require, "cmp")
 if cmp_ok then
     local kind_icons = {
-        Text          = "\u{f0d18}",
-        Method        = "\u{f06b1}",
-        Function      = "\u{f0530}",
-        Constructor   = "\u{f0bd7}",
-        Field         = "\u{f0ba9}",
-        Variable      = "\u{f0628}",
-        Class         = "\u{f0ec6}",
-        Interface     = "\u{f0f8a}",
-        Module        = "\u{f0480}",
-        Property      = "\u{f032b}",
-        Unit          = "\u{f0493}",
-        Value         = "\u{f0556}",
-        Enum          = "\u{f02ad}",
-        Keyword       = "\u{f03fe}",
-        Snippet       = "\u{f0cce}",
-        Color         = "\u{f0f3c}",
-        File          = "\u{f0168}",
-        Reference     = "\u{f0318}",
-        Folder        = "\u{f0169}",
-        EnumMember    = "\u{f02ad}",
-        Constant      = "\u{f04d9}",
-        Struct        = "\u{f0ec6}",
-        Event         = "\u{f01ad}",
-        Operator      = "\u{f0599}",
-        TypeParameter = "\u{f0cec}",
+        Text          = "",
+        Method        = "",
+        Function      = "",
+        Constructor   = "",
+        Field         = "",
+        Variable      = "",
+        Class         = "",
+        Interface     = "",
+        Module        = "",
+        Property      = "",
+        Unit          = "",
+        Value         = "",
+        Enum          = "",
+        Keyword       = "",
+        Snippet       = "",
+        Color         = "",
+        File          = "",
+        Reference     = "",
+        Folder        = "",
+        EnumMember    = "",
+        Constant      = "",
+        Struct        = "",
+        Event         = "",
+        Operator      = "",
+        TypeParameter = "",
     }
 
     cmp.setup({
@@ -367,6 +368,32 @@ if gs_ok then
     })
 end
 
+-- nvim-tree
+local nt_ok, nvimtree = pcall(require, "nvim-tree")
+if nt_ok then
+    nvimtree.setup({
+        filters = {
+            dotfiles = false,  -- set true if you want to hide ALL dotfiles
+            custom   = { "^.git$" },
+        },
+        renderer = {
+            icons = {
+                show = {
+                    file         = false,
+                    folder       = false,
+                    folder_arrow = false,
+                    git          = false,
+                },
+            },
+        },
+    })
+
+    -- Underline folder names
+    vim.api.nvim_set_hl(0, "NvimTreeFolderName",      { underline = true })
+    vim.api.nvim_set_hl(0, "NvimTreeOpenedFolderName", { underline = true })
+    vim.api.nvim_set_hl(0, "NvimTreeEmptyFolderName",  { underline = true })
+end
+
 -- uv.nvim
 local uv_ok, uv = pcall(require, "uv")
 if uv_ok then
@@ -441,7 +468,6 @@ end
 
 -- Render markdown
 require("render-markdown").setup()
-
 
 -- Formatting
 map("n", "<leader>tf", function()
