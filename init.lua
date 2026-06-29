@@ -7,12 +7,10 @@ vim.g.maplocalleader = "\\"
 -- Plugins 
 vim.pack.add({
     { src = "https://github.com/nvim-lua/plenary.nvim" },
-    { src = "https://github.com/nvim-telescope/telescope.nvim" },
     { src = "https://github.com/lewis6991/gitsigns.nvim" },
     { src = "https://github.com/stevearc/conform.nvim" },
     { src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main", build = ":TSUpdate" },
     { src = "https://github.com/SmiteshP/nvim-navic" },
-    { src = "https://github.com/nvim-tree/nvim-tree.lua" },
     { src = "https://github.com/benomahony/uv.nvim" },
     { src = "https://github.com/nvim-lualine/lualine.nvim" },
     { src = "https://github.com/nvim-tree/nvim-web-devicons" },
@@ -23,7 +21,29 @@ vim.pack.add({
     { src = "https://github.com/L3MON4D3/LuaSnip" },
     { src = "https://github.com/saadparwaiz1/cmp_luasnip" },
     { src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
+    { src = "https://github.com/folke/snacks.nvim" },
+
 })
+
+-- snacks.nvim
+local snacks_ok, snacks = pcall(require, "snacks")
+if snacks_ok then
+    snacks.setup({
+        bigfile      = { enabled = true },
+        notifier     = { enabled = true },
+        indent       = { enabled = true },
+        input        = { enabled = true },
+        scroll       = { enabled = true },
+        words        = { enabled = true },
+        terminal     = { enabled = true },
+        bufdelete    = { enabled = true },
+        dashboard    = { enabled = true },
+        picker       = { enabled = true },
+        explorer     = { enabled = true },
+        animate      = { enabled = true },
+        statuscolumn = { enabled = true },
+    })
+end
 
 -- Options 
 local opt = vim.opt
@@ -341,45 +361,6 @@ if gs_ok then
     })
 end
 
--- nvim-tree
-local nt_ok, nvimtree = pcall(require, "nvim-tree")
-if nt_ok then
-    nvimtree.setup({
-        filters = {
-            dotfiles = false,  -- set true if you want to hide ALL dotfiles
-            custom   = { "^.git$" },
-        },
-        renderer = {
-            icons = {
-                show = {
-                    file         = true,
-                    folder       = true,
-                    folder_arrow = true,
-                    git          = false,
-                },
-                glyphs = {
-                    default  = "-",
-                    folder   = { arrow_open = "v", arrow_closed = ">" },
-                    git      = {
-                        unstaged  = "M",
-                        staged    = "A",
-                        unmerged  = "U",
-                        renamed   = "R",
-                        untracked = "?",
-                        deleted   = "D",
-                        ignored   = "!",
-                    },
-                },
-            },
-        },
-    })
-
-    -- Underline folder names
-    vim.api.nvim_set_hl(0, "NvimTreeFolderName",      { underline = true })
-    vim.api.nvim_set_hl(0, "NvimTreeOpenedFolderName", { underline = true })
-    vim.api.nvim_set_hl(0, "NvimTreeEmptyFolderName",  { underline = true })
-end
-
 -- uv.nvim
 local uv_ok, uv = pcall(require, "uv")
 if uv_ok then
@@ -455,20 +436,22 @@ end
 -- Render markdown
 require("render-markdown").setup()
 
+
 -- Formatting
 map("n", "<leader>tf", function()
     vim.g.format_on_save = not vim.g.format_on_save
     vim.notify("Format on save: " .. (vim.g.format_on_save and "on" or "off"))
 end, "Toggle format on save")
 
--- Telescope
-local tel_ok, tb = pcall(require, "telescope.builtin")
-if tel_ok then
-    map("n", "<leader>ff", tb.find_files,  "Find files")
-    map("n", "<leader>fg", tb.live_grep,   "Live grep")
-    map("n", "<leader>fb", tb.buffers,     "Buffers")
-    map("n", "<leader>fh", tb.help_tags,   "Help tags")
-    map("n", "<leader>fd", tb.diagnostics, "Diagnostics")
+-- snacks picker
+local picker_ok = pcall(require, "snacks")
+if picker_ok then
+    local pk = require("snacks").picker
+    map("n", "<leader>ff", function() pk.files() end,       "Find files")
+    map("n", "<leader>fg", function() pk.grep() end,        "Live grep")
+    map("n", "<leader>fb", function() pk.buffers() end,     "Buffers")
+    map("n", "<leader>fh", function() pk.help() end,        "Help tags")
+    map("n", "<leader>fd", function() pk.diagnostics() end, "Diagnostics")
 end
 
 -- Winbar breadcrumbs
@@ -477,8 +460,11 @@ if navic_ok_winbar then
     vim.opt.winbar = "%{%v:lua.require'nvim-navic'.get_location()%}"
 end
 
--- nvim-tree.lua
-map("n", "<leader>b", "<cmd>NvimTreeToggle<CR>", "Toggle file tree")
+-- snacks explorer
+local explorer_ok = pcall(require, "snacks")
+if explorer_ok then
+    map("n", "<leader>b", function() require("snacks").explorer.open() end, "Toggle file tree")
+end
 
 -- LSP extras (0.12 built-ins cover gra/grn/grr/gri/grt already)
 map("n", "<leader>ld", vim.lsp.buf.definition,     "Go to definition")
@@ -499,10 +485,10 @@ map("n", "<C-j>", "<C-w>j", "Move to lower window")
 map("n", "<C-k>", "<C-w>k", "Move to upper window")
 map("n", "<C-l>", "<C-w>l", "Move to right window")
 
--- Terminal Windows
-map("n", "<leader>tv", function() vim.cmd("vertical " .. math.floor(vim.o.columns * 0.25) .. "split | terminal" ) end)
-map("n", "<leader>th", function () vim.cmd(math.floor(vim.o.lines * 0.25) .. "split | terminal" ) end)
-map("n", "<leader>tt", function() vim.cmd(math.floor(vim.o.lines * 0.25) .. "split | terminal" ) end)
+-- Terminal Windows (snacks.terminal)
+map("n", "<leader>tv", function() require("snacks").terminal.toggle(nil, { win = { position = "right", size = 0.25 } }) end, "Vertical terminal")
+map("n", "<leader>th", function() require("snacks").terminal.toggle(nil, { win = { position = "bottom", size = 0.25 } }) end, "Horizontal terminal")
+map("n", "<leader>tt", function() require("snacks").terminal.toggle() end, "Toggle terminal")
 
 -- Misc
 map("n", "<Esc>",     "<cmd>nohlsearch<CR>", "Clear search highlight")
