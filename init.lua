@@ -22,7 +22,7 @@ vim.pack.add({
     { src = "https://github.com/saadparwaiz1/cmp_luasnip" },
     { src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
     { src = "https://github.com/folke/snacks.nvim" },
-
+    { src = "https://github.com/rebelot/kanagawa.nvim" },
 })
 
 -- snacks.nvim
@@ -452,6 +452,7 @@ if picker_ok then
     map("n", "<leader>fb", function() pk.buffers() end,     "Buffers")
     map("n", "<leader>fh", function() pk.help() end,        "Help tags")
     map("n", "<leader>fd", function() pk.diagnostics() end, "Diagnostics")
+    map("n", "<leader>p", function() pk.commands() end, "Commands" ) 
 end
 
 -- Winbar breadcrumbs
@@ -497,5 +498,5 @@ map("n", "<leader>q", "<cmd>quit<CR>",       "Quit")
 map("n", "<leader>u", "<cmd>packadd nvim.undotree | Undotree<CR>", "Undotree")
 
 -- Colorscheme 
-vim.cmd.colorscheme("2026-dark")
+vim.cmd.colorscheme("kanagawa-dragon")
 
