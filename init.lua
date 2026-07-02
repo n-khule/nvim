@@ -37,7 +37,13 @@ if snacks_ok then
         words        = { enabled = true },
         terminal     = { enabled = true },
         bufdelete    = { enabled = true },
-        dashboard    = { enabled = true },
+        dashboard    = { 
+            enabled = true,
+            sections = {
+                { section = "header" },
+                { section = "keys", gap = 1, padding = 1 },
+            },
+        },
         picker       = { enabled = true },
         explorer     = { enabled = true },
         animate      = { enabled = true },
