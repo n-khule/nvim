@@ -22,7 +22,7 @@ vim.pack.add({
     { src = "https://github.com/saadparwaiz1/cmp_luasnip" },
     { src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
     { src = "https://github.com/folke/snacks.nvim" },
-    { src = "https://github.com/rebelot/kanagawa.nvim" },
+    { src = "https://github.com/projekt0n/github-nvim-theme" },
 })
 
 -- snacks.nvim
@@ -504,5 +504,5 @@ map("n", "<leader>q", "<cmd>quit<CR>",       "Quit")
 map("n", "<leader>u", "<cmd>packadd nvim.undotree | Undotree<CR>", "Undotree")
 
 -- Colorscheme 
-vim.cmd.colorscheme("kanagawa-dragon")
+vim.cmd.colorscheme("2026-dark")
 

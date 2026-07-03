@@ -1,5 +1,5 @@
--- 2026 Dark — Neovim colorscheme
--- Ported from the 2026 Dark VS Code theme
+-- DARK — Neovim colorscheme
+-- Based on the 2026 Dark VS Code theme
 
 vim.cmd("highlight clear")
 if vim.fn.exists("syntax_on") then vim.cmd("syntax reset") end
@@ -9,48 +9,48 @@ vim.g.colors_name = "2026-dark"
 local hi = vim.api.nvim_set_hl
 
 -- Editor UI
-hi(0, "Normal",         { fg = "#BBBEBF", bg = "#121314" })
-hi(0, "NormalFloat",    { fg = "#bfbfbf", bg = "#202122" })
-hi(0, "FloatBorder",    { fg = "#2A2B2C", bg = "#202122" })
-hi(0, "Cursor",         { fg = "#121314", bg = "#BBBEBF" })
-hi(0, "CursorLine",     { bg = "#242526" })
-hi(0, "CursorColumn",   { bg = "#242526" })
-hi(0, "ColorColumn",    { bg = "#242526" })
-hi(0, "LineNr",         { fg = "#858889" })
-hi(0, "CursorLineNr",   { fg = "#BBBEBF" })
-hi(0, "SignColumn",     { fg = "#858889", bg = "#121314" })
-hi(0, "VertSplit",      { fg = "#2A2B2C", bg = "#121314" })
-hi(0, "WinSeparator",   { fg = "#2A2B2C" })
-hi(0, "StatusLine",     { fg = "#8C8C8C", bg = "#191A1B" })
-hi(0, "StatusLineNC",   { fg = "#555555", bg = "#191A1B" })
-hi(0, "TabLine",        { fg = "#8C8C8C", bg = "#191A1B" })
-hi(0, "TabLineSel",     { fg = "#bfbfbf", bg = "#121314" })
-hi(0, "TabLineFill",    { bg = "#191A1B" })
-hi(0, "Folded",         { fg = "#8C8C8C", bg = "#242526" })
-hi(0, "FoldColumn",     { fg = "#8C8C8C", bg = "#121314" })
-hi(0, "NonText",        { fg = "#2A2B2C" })
-hi(0, "Whitespace",     { fg = "#2A2B2C" })
-hi(0, "SpecialKey",     { fg = "#2A2B2C" })
-hi(0, "EndOfBuffer",    { fg = "#2A2B2C" })
-hi(0, "MatchParen",     { bg = "#1E3D4F" })   -- #3994BC @ 33% on #121314
-hi(0, "Visual",         { bg = "#1F4D5E" })   -- #276782 @ 87% on #121314
-hi(0, "VisualNOS",      { bg = "#173848" })   -- #276782 @ 38% on #121314
-hi(0, "Search",         { fg = "#BBBEBF", bg = "#1B4356" })  -- #276782 @ 56% on #121314
-hi(0, "IncSearch",      { fg = "#121314", bg = "#48A0C7" })
-hi(0, "CurSearch",      { fg = "#121314", bg = "#48A0C7" })
-hi(0, "Substitute",     { fg = "#121314", bg = "#ffa657" })
+hi(0, "Normal",         { fg = "#E2E5E6", bg = "#000000" })
+hi(0, "NormalFloat",    { fg = "#E8E8E8", bg = "#000000" })
+hi(0, "FloatBorder",    { fg = "#6E7072", bg = "#000000" })
+hi(0, "Cursor",         { fg = "#000000", bg = "#E2E5E6" })
+hi(0, "CursorLine",     { bg = "#333435" })
+hi(0, "CursorColumn",   { bg = "#333435" })
+hi(0, "ColorColumn",    { bg = "#333435" })
+hi(0, "LineNr",         { fg = "#C0C3C5" })
+hi(0, "CursorLineNr",   { fg = "#E2E5E6" })
+hi(0, "SignColumn",     { fg = "#C0C3C5", bg = "#000000" })
+hi(0, "VertSplit",      { fg = "#6E7072", bg = "#000000" })
+hi(0, "WinSeparator",   { fg = "#6E7072" })
+hi(0, "StatusLine",     { fg = "#C8C8C8", bg = "#333435" })
+hi(0, "StatusLineNC",   { fg = "#9A9A9A", bg = "#333435" })
+hi(0, "TabLine",        { fg = "#C8C8C8", bg = "#333435" })
+hi(0, "TabLineSel",     { fg = "#E8E8E8", bg = "#000000" })
+hi(0, "TabLineFill",    { bg = "#333435" })
+hi(0, "Folded",         { fg = "#C8C8C8", bg = "#333435" })
+hi(0, "FoldColumn",     { fg = "#C8C8C8", bg = "#000000" })
+hi(0, "NonText",        { fg = "#6E7072" })
+hi(0, "Whitespace",     { fg = "#6E7072" })
+hi(0, "SpecialKey",     { fg = "#6E7072" })
+hi(0, "EndOfBuffer",    { fg = "#6E7072" })
+hi(0, "MatchParen",     { bg = "#2B4F66" })   -- #3994BC @ 33% on #000000
+hi(0, "Visual",         { bg = "#2C5E75" })   -- #276782 @ 87% on #000000
+hi(0, "VisualNOS",      { bg = "#234A5E" })   -- #276782 @ 38% on #000000
+hi(0, "Search",         { fg = "#E2E5E6", bg = "#275670" })  -- #276782 @ 56% on #000000
+hi(0, "IncSearch",      { fg = "#000000", bg = "#48A0C7" })
+hi(0, "CurSearch",      { fg = "#000000", bg = "#48A0C7" })
+hi(0, "Substitute",     { fg = "#000000", bg = "#ffa657" })
 
 -- Popups / menus
-hi(0, "Pmenu",          { fg = "#bfbfbf", bg = "#202122" })
-hi(0, "PmenuSel",       { fg = "#ededed", bg = "#1A3040" })  -- #3994BC @ 15% on #202122
-hi(0, "PmenuSbar",      { bg = "#202122" })
-hi(0, "PmenuThumb",     { bg = "#4A4B4C" })               -- #838485 @ 40% on #202122
-hi(0, "WildMenu",       { fg = "#ededed", bg = "#1A3040" })
+hi(0, "Pmenu",          { fg = "#E8E8E8", bg = "#000000" })
+hi(0, "PmenuSel",       { fg = "#ededed", bg = "#253D52" })
+hi(0, "PmenuSbar",      { bg = "#000000" })
+hi(0, "PmenuThumb",     { bg = "#606264" })               -- #B0B3B5 @ 40% on #000000
+hi(0, "WildMenu",       { fg = "#ededed", bg = "#253D52" })
 
 -- Messages / prompts
 hi(0, "ErrorMsg",       { fg = "#f48771" })
 hi(0, "WarningMsg",     { fg = "#e5ba7d" })
-hi(0, "ModeMsg",        { fg = "#bfbfbf" })
+hi(0, "ModeMsg",        { fg = "#E8E8E8" })
 hi(0, "MoreMsg",        { fg = "#48A0C7" })
 hi(0, "Question",       { fg = "#48A0C7" })
 
@@ -58,29 +58,29 @@ hi(0, "Question",       { fg = "#48A0C7" })
 hi(0, "DiagnosticError",          { fg = "#f48771" })
 hi(0, "DiagnosticWarn",           { fg = "#e5ba7d" })
 hi(0, "DiagnosticInfo",           { fg = "#48A0C7" })
-hi(0, "DiagnosticHint",           { fg = "#A6B6C2" })
+hi(0, "DiagnosticHint",           { fg = "#D0E0EE" })
 hi(0, "DiagnosticUnderlineError", { undercurl = true, sp = "#f48771" })
 hi(0, "DiagnosticUnderlineWarn",  { undercurl = true, sp = "#e5ba7d" })
 hi(0, "DiagnosticUnderlineInfo",  { undercurl = true, sp = "#48A0C7" })
-hi(0, "DiagnosticUnderlineHint",  { undercurl = true, sp = "#8C8C8C" })
-hi(0, "DiagnosticVirtualTextHint", { fg = "#9BB4C9", bg = "#1A1B1C" })
+hi(0, "DiagnosticUnderlineHint",  { undercurl = true, sp = "#C8C8C8" })
+hi(0, "DiagnosticVirtualTextHint", { fg = "#D0E4F5", bg = "#000000" })
 
 -- Diff
-hi(0, "DiffAdd",        { bg = "#162B1A" })   -- #347d39 @ 15% on #121314
-hi(0, "DiffChange",     { bg = "#5a1e02" })
-hi(0, "DiffDelete",     { bg = "#2B1515" })   -- #c93c37 @ 15% on #121314
-hi(0, "DiffText",       { bg = "#1E4A20" })   -- #57ab5a @ 30% on #121314
+hi(0, "DiffAdd",        { bg = "#203D26" })   -- #347d39 @ 15% on #000000
+hi(0, "DiffChange",     { bg = "#7A3010" })
+hi(0, "DiffDelete",     { bg = "#3D2020" })   -- #c93c37 @ 15% on #000000
+hi(0, "DiffText",       { bg = "#2D6030" })   -- #57ab5a @ 30% on #000000
 hi(0, "Added",          { fg = "#72C892" })
 hi(0, "Changed",        { fg = "#ffa657" })
 hi(0, "Removed",        { fg = "#F28772" })
 
 -- Gutter signs
-hi(0, "GitSignsAdd",    { fg = "#72C892", bg = "#121314" })
-hi(0, "GitSignsChange", { fg = "#ffa657", bg = "#121314" })
-hi(0, "GitSignsDelete", { fg = "#F28772", bg = "#121314" })
+hi(0, "GitSignsAdd",    { fg = "#72C892", bg = "#000000" })
+hi(0, "GitSignsChange", { fg = "#ffa657", bg = "#000000" })
+hi(0, "GitSignsDelete", { fg = "#F28772", bg = "#000000" })
 
 -- Syntax — token colors mapped from VS Code scopes
-hi(0, "Comment",        { fg = "#8b949e", italic = true })
+hi(0, "Comment",        { fg = "#B8C0CC", italic = true })
 hi(0, "Constant",       { fg = "#79c0ff" })
 hi(0, "String",         { fg = "#a5d6ff" })
 hi(0, "Character",      { fg = "#ff7b72" })
@@ -108,10 +108,10 @@ hi(0, "Special",        { fg = "#7ee787" })
 hi(0, "SpecialChar",    { fg = "#7ee787", bold = true })
 hi(0, "Tag",            { fg = "#7ee787" })
 hi(0, "Delimiter",      { fg = "#c9d1d9" })
-hi(0, "SpecialComment", { fg = "#8b949e" })
+hi(0, "SpecialComment", { fg = "#B8C0CC" })
 hi(0, "Underlined",     { fg = "#a5d6ff", underline = true })
 hi(0, "Error",          { fg = "#ffa198", italic = true })
-hi(0, "Todo",           { fg = "#121314", bg = "#8b949e", bold = true })
+hi(0, "Todo",           { fg = "#000000", bg = "#B8C0CC", bold = true })
 
 -- Treesitter (nvim 0.8+ @-prefixed groups)
 hi(0, "@comment",               { link = "Comment" })
@@ -183,21 +183,74 @@ hi(0, "@lsp.type.comment",      { link = "@comment" })
 hi(0, "@lsp.type.operator",     { link = "@operator" })
 hi(0, "@lsp.type.decorator",    { fg = "#d2a8ff" })
 hi(0, "@lsp.type.macro",        { fg = "#79c0ff" })
-hi(0, "LspInlayHint",           { fg = "#9BB4C9", bg = "#1A1B1C", italic = true })
+hi(0, "LspInlayHint",           { fg = "#D0E4F5", bg = "#000000", italic = true })
 
 -- nvim-cmp
-hi(0, "CmpItemAbbr",            { fg = "#bfbfbf" })
+hi(0, "CmpItemAbbr",            { fg = "#E8E8E8" })
 hi(0, "CmpItemAbbrMatch",       { fg = "#48A0C7", bold = true })
 hi(0, "CmpItemAbbrMatchFuzzy",  { fg = "#48A0C7" })
-hi(0, "CmpItemKind",            { fg = "#8C8C8C" })
-hi(0, "CmpItemMenu",            { fg = "#555555" })
+hi(0, "CmpItemKind",            { fg = "#C8C8C8" })
+hi(0, "CmpItemMenu",            { fg = "#9A9A9A" })
 
--- Telescope
-hi(0, "TelescopeBorder",        { fg = "#2A2B2C" })
-hi(0, "TelescopePromptBorder",  { fg = "#3994BC" })
-hi(0, "TelescopeSelection",     { bg = "#1A3040" })
-hi(0, "TelescopeMatching",      { fg = "#48A0C7", bold = true })
+-- Snacks picker (replaces telescope)
+hi(0, "SnacksPicker",                { fg = "#E8E8E8", bg = "#000000" })
+hi(0, "SnacksPickerBorder",          { fg = "#6E7072", bg = "#000000" })
+hi(0, "SnacksPickerPromptBorder",    { fg = "#3994BC" })
+hi(0, "SnacksPickerPrompt",          { fg = "#48A0C7" })
+hi(0, "SnacksPickerInput",           { fg = "#E2E5E6", bg = "#000000" })
+hi(0, "SnacksPickerList",            { fg = "#E8E8E8", bg = "#000000" })
+hi(0, "SnacksPickerListCursorLine",  { bg = "#253D52" })
+hi(0, "SnacksPickerMatch",           { fg = "#48A0C7", bold = true })
+hi(0, "SnacksPickerPreview",         { bg = "#000000" })
+hi(0, "SnacksPickerFile",            { fg = "#E2E5E6" })
+hi(0, "SnacksPickerDir",             { fg = "#3994BC" })
+hi(0, "SnacksPickerSearch",          { fg = "#48A0C7", bold = true })
+hi(0, "SnacksPickerIcon",            { fg = "#48A0C7" })
+hi(0, "SnacksPickerSelected",        { fg = "#ffa657" })
+hi(0, "SnacksPickerTotals",          { fg = "#C0C3C5" })
+hi(0, "SnacksPickerDimmed",          { fg = "#9A9A9A" })
 
--- indent-blankline
-hi(0, "IblIndent",              { fg = "#2A2B2C" })
-hi(0, "IblScope",               { fg = "#838485" })
+-- Snacks window / borders
+hi(0, "SnacksNormal",                { fg = "#E8E8E8", bg = "#000000" })
+hi(0, "SnacksNormalNC",              { fg = "#C8C8C8", bg = "#000000" })
+hi(0, "SnacksTitle",                 { fg = "#48A0C7" })
+hi(0, "SnacksFooter",                { fg = "#C0C3C5" })
+hi(0, "SnacksWinBar",                { fg = "#C8C8C8" })
+hi(0, "SnacksWinSeparator",          { fg = "#6E7072" })
+
+-- Snacks dashboard
+hi(0, "SnacksDashboardNormal",       { fg = "#E2E5E6", bg = "#000000" })
+hi(0, "SnacksDashboardHeader",       { fg = "#48A0C7", bold = true })
+hi(0, "SnacksDashboardIcon",         { fg = "#3994BC" })
+hi(0, "SnacksDashboardKey",          { fg = "#ffa657" })
+hi(0, "SnacksDashboardDesc",         { fg = "#B8C0CC" })
+hi(0, "SnacksDashboardFooter",       { fg = "#C0C3C5" })
+hi(0, "SnacksDashboardSpecial",      { fg = "#d2a8ff" })
+
+-- Snacks notifier
+hi(0, "SnacksNotifierMinimal",       { fg = "#E8E8E8", bg = "#000000" })
+hi(0, "SnacksNotifierInfo",          { fg = "#48A0C7" })
+hi(0, "SnacksNotifierWarn",          { fg = "#e5ba7d" })
+hi(0, "SnacksNotifierError",         { fg = "#f48771" })
+hi(0, "SnacksNotifierDebug",         { fg = "#C8C8C8" })
+hi(0, "SnacksNotifierTrace",         { fg = "#9A9A9A" })
+hi(0, "SnacksNotifierBorder",        { fg = "#6E7072" })
+hi(0, "SnacksNotifierTitle",         { fg = "#48A0C7" })
+hi(0, "SnacksNotifierFooter",        { fg = "#C0C3C5" })
+hi(0, "SnacksNotifierHistory",       { fg = "#E2E5E6", bg = "#000000" })
+hi(0, "SnacksNotifierHistoryTitle",  { fg = "#48A0C7", bold = true })
+hi(0, "SnacksNotifierHistoryDateTime", { fg = "#C0C3C5" })
+
+-- Snacks indent (only scopes need explicit colors)
+hi(0, "SnacksIndent",                { fg = "#6E7072" })
+hi(0, "SnacksIndentScope",           { fg = "#B0B3B5" })
+hi(0, "SnacksIndentChunk",           { fg = "#B0B3B5" })
+
+-- Snacks input
+hi(0, "SnacksInputNormal",           { fg = "#E2E5E6", bg = "#000000" })
+hi(0, "SnacksInputBorder",           { fg = "#3994BC" })
+hi(0, "SnacksInputIcon",             { fg = "#48A0C7" })
+hi(0, "SnacksInputTitle",            { fg = "#48A0C7" })
+
+-- Snacks statuscolumn
+hi(0, "SnacksStatusColumnMark",      { fg = "#48A0C7" })
