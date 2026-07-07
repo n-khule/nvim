@@ -152,6 +152,44 @@ vim.lsp.config("ts_ls", {
     },
 })
 
+-- vtsls for TypeScript
+vim.lsp.config("vtsls", {
+    cmd = { "vtsls", "--stdio" },
+
+    filetypes = {
+        "typescript",
+        "javascript",
+        "typescriptreact",
+        "javascriptreact",
+    },
+
+    root_dir = vim.fs.root(0, {
+        "tsconfig.json",
+        "jsconfig.json",
+        "package.json",
+        ".git",
+    }),
+
+    settings = {
+        typescript = {
+            inlayHints = {
+                parameterNames = { enabled = "all" },
+                parameterTypes = { enabled = true },
+                variableTypes = { enabled = true },
+                propertyDeclarationTypes = { enabled = true },
+                functionLikeReturnTypes = { enabled = true },
+            },
+        },
+
+        javascript = {
+            inlayHints = {
+                parameterNames = { enabled = "all" },
+                variableTypes = { enabled = true },
+            },
+        },
+    },
+})
+
 -- nvim-cmp capabilities for LSP
 local cmp_capabilities = (function()
     local ok, cmp_lsp = pcall(require, "cmp_nvim_lsp")
@@ -159,7 +197,7 @@ local cmp_capabilities = (function()
 end)()
 vim.lsp.config("*", { capabilities = cmp_capabilities })
 
-vim.lsp.enable({ "basedpyright", "gopls", "golangci_lint_ls", "lua_ls", "ts_ls" })
+vim.lsp.enable({ "basedpyright", "gopls", "golangci_lint_ls", "lua_ls", "vtsls" })
 
 -- Enable inlay hints and code lens when the server supports them
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -305,8 +343,7 @@ if cmp_ok then
     })
 end
 
--- Formatting 
-vim.g.format_on_save = false -- toggle with <leader>tf
+-- Formatting
 local cf_ok, conform = pcall(require, "conform")
 if cf_ok then
     conform.setup({
@@ -325,7 +362,12 @@ if cf_ok then
     })
     vim.api.nvim_create_autocmd("BufWritePre", {
         callback = function(args)
-            if vim.g.format_on_save then
+            conform.format({ bufnr = args.buf, lsp_fallback = true })
+        end,
+    })
+    vim.api.nvim_create_autocmd("InsertLeave", {
+        callback = function(args)
+            if vim.bo[args.buf].filetype ~= "" then
                 conform.format({ bufnr = args.buf, lsp_fallback = true })
             end
         end,
@@ -443,11 +485,6 @@ end
 require("render-markdown").setup()
 
 
--- Formatting
-map("n", "<leader>tf", function()
-    vim.g.format_on_save = not vim.g.format_on_save
-    vim.notify("Format on save: " .. (vim.g.format_on_save and "on" or "off"))
-end, "Toggle format on save")
 
 -- snacks picker
 local picker_ok = pcall(require, "snacks")
@@ -491,6 +528,9 @@ map("n", "<C-h>", "<C-w>h", "Move to left window")
 map("n", "<C-j>", "<C-w>j", "Move to lower window")
 map("n", "<C-k>", "<C-w>k", "Move to upper window")
 map("n", "<C-l>", "<C-w>l", "Move to right window")
+
+-- Recently opened buffers
+vim.keymap.set("n", "<C-p>", function() require("snacks").picker.recent({ title = "Recently Opened Files", filter = { cwd = true } }) end, { desc = "Recently Opened Files",})
 
 -- Terminal Windows (snacks.terminal)
 map("n", "<leader>tv", function() require("snacks").terminal.toggle(nil, { win = { position = "right", size = 0.25 } }) end, "Vertical terminal")
