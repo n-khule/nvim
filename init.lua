@@ -44,7 +44,7 @@ if snacks_ok then
                 { section = "keys", gap = 1, padding = 1 },
             },
         },
-        picker       = { enabled = true },
+        picker       = { enabled = true, hidden = true },
         explorer     = { enabled = true },
         animate      = { enabled = true },
         statuscolumn = { enabled = true },
@@ -178,6 +178,9 @@ vim.lsp.config("vtsls", {
                 variableTypes = { enabled = true },
                 propertyDeclarationTypes = { enabled = true },
                 functionLikeReturnTypes = { enabled = true },
+            },
+            preferences = {
+                importModuleSpecifier = "non-relative",
             },
         },
 
@@ -389,6 +392,11 @@ if ts_ok then
         indent           = { enable = true },
     })
 end
+opt.foldmethod = "expr"
+opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+opt.foldlevel = 99
+opt.foldlevelstart = 99
+opt.foldenable = true
 
 -- Git signs 
 local gs_ok, gitsigns = pcall(require, "gitsigns")
@@ -492,10 +500,10 @@ if picker_ok then
     local pk = require("snacks").picker
     map("n", "<leader>ff", function() pk.files() end,       "Find files")
     map("n", "<leader>fg", function() pk.grep() end,        "Live grep")
-    map("n", "<leader>fb", function() pk.buffers() end,     "Buffers")
+    map("n", "<leader>t", function() pk.buffers() end, "List of open buffers" )
     map("n", "<leader>fh", function() pk.help() end,        "Help tags")
     map("n", "<leader>fd", function() pk.diagnostics() end, "Diagnostics")
-    map("n", "<leader>p", function() pk.commands() end, "Commands" ) 
+    map("n", "<leader>p", function() pk.keymaps() end, "Select Keymap to run" ) 
 end
 
 -- Winbar breadcrumbs
@@ -529,13 +537,10 @@ map("n", "<C-j>", "<C-w>j", "Move to lower window")
 map("n", "<C-k>", "<C-w>k", "Move to upper window")
 map("n", "<C-l>", "<C-w>l", "Move to right window")
 
--- Recently opened buffers
-vim.keymap.set("n", "<C-p>", function() require("snacks").picker.recent({ title = "Recently Opened Files", filter = { cwd = true } }) end, { desc = "Recently Opened Files",})
+-- Buffer navigation
+map("n", "<leader><Tab>", "<Cmd>bnext<CR>", "Open next buffer")
+map("n", "<leader><S-Tab>", "<Cmd>bprevious<CR>", "Open previous buffer")
 
--- Terminal Windows (snacks.terminal)
-map("n", "<leader>tv", function() require("snacks").terminal.toggle(nil, { win = { position = "right", size = 0.25 } }) end, "Vertical terminal")
-map("n", "<leader>th", function() require("snacks").terminal.toggle(nil, { win = { position = "bottom", size = 0.25 } }) end, "Horizontal terminal")
-map("n", "<leader>tt", function() require("snacks").terminal.toggle() end, "Toggle terminal")
 
 -- Misc
 map("n", "<Esc>",     "<cmd>nohlsearch<CR>", "Clear search highlight")
