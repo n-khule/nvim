@@ -22,7 +22,10 @@ vim.pack.add({
     { src = "https://github.com/saadparwaiz1/cmp_luasnip" },
     { src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
     { src = "https://github.com/folke/snacks.nvim" },
+    { src = "https://github.com/mason-org/mason.nvim" },
     { src = "https://github.com/projekt0n/github-nvim-theme" },
+    { src = "https://github.com/gmr458/vscode_modern_theme.nvim" },
+    { src = "https://github.com/EdenEast/nightfox.nvim.git" },
 })
 
 -- snacks.nvim
@@ -192,6 +195,98 @@ vim.lsp.config("vtsls", {
         },
     },
 })
+
+local mason_ok, mason = pcall(require, "mason")
+local registry_ok, registry = pcall(require, "mason-registry")
+if mason_ok and registry_ok then
+    mason.setup()
+    local prompted = {}
+    local function servers_for_ft(ft)
+        local servers = {}
+        for name, config in pairs(vim.lsp.config) do
+            if config.filetypes and vim.tbl_contains(config.filetypes, ft) then
+                table.insert(servers, name)
+            end
+        end
+        table.sort(servers)
+        return servers
+    end
+
+    vim.api.nvim_create_autocmd("FileType", {
+        callback = function(args)
+            vim.schedule(function()
+                local missing = {}
+
+                for _, server in ipairs(servers_for_ft(args.match)) do
+                    if not prompted[server] then
+                        local ok, pkg = pcall(registry.get_package, server)
+
+                        if ok and not pkg:is_installed() then
+                            table.insert(missing, {
+                                server = server,
+                                package = pkg,
+                            })
+                        end
+                    end
+                end
+
+                if #missing == 0 then
+                    return
+                end
+
+                if #missing == 1 then
+                    local item = missing[1]
+
+                    vim.ui.select({ "Install", "Cancel" }, {
+                        prompt = ("Install %s?"):format(item.server),
+                    }, function(choice)
+                        prompted[item.server] = true
+
+                        if choice == "Install" then
+                            item.package:install()
+                        end
+                    end)
+
+                    return
+                end
+
+                if snacks_ok then
+                    Snacks.picker.select(missing, {
+                        prompt = "Select language server to install",
+                        format_item = function(item)
+                            return item.server
+                        end,
+                    }, function(item)
+                        if item then
+                            prompted[item.server] = true
+                            item.package:install()
+                        end
+                    end)
+                else
+                    local names = vim.tbl_map(function(item)
+                        return item.server
+                    end, missing)
+
+                    vim.ui.select(names, {
+                        prompt = "Select language server to install",
+                    }, function(choice)
+                        if not choice then
+                            return
+                        end
+
+                        for _, item in ipairs(missing) do
+                            if item.server == choice then
+                                prompted[item.server] = true
+                                item.package:install()
+                                break
+                            end
+                        end
+                    end)
+                end
+            end)
+        end,
+    })
+end
 
 -- nvim-cmp capabilities for LSP
 local cmp_capabilities = (function()
@@ -520,7 +615,14 @@ end
 
 -- LSP extras (0.12 built-ins cover gra/grn/grr/gri/grt already)
 map("n", "<leader>ld", vim.lsp.buf.definition,     "Go to definition")
-map("n", "<leader>lh", vim.lsp.buf.hover,          "Hover docs")
+map("n", "<leader>lh", function()
+    vim.lsp.buf.hover({
+        border = "rounded",
+        focus = "always",
+        max_width = 80,
+        max_height = 20,
+    })
+end, "Hover docs")
 map("n", "<leader>ls", vim.lsp.buf.signature_help, "Signature help")
 map("n", "<leader>lf", vim.lsp.buf.format,         "LSP format")
 
@@ -549,5 +651,5 @@ map("n", "<leader>q", "<cmd>quit<CR>",       "Quit")
 map("n", "<leader>u", "<cmd>packadd nvim.undotree | Undotree<CR>", "Undotree")
 
 -- Colorscheme 
-vim.cmd.colorscheme("2026-dark")
+vim.cmd.colorscheme("carbonfox")
 
